@@ -1,7 +1,7 @@
 pkgbase = jq
 	pkgdesc = Command-line JSON processor
 	pkgver = 1.7.1
-	pkgrel = 1
+	pkgrel = 2
 	url = https://jqlang.github.io/jq/
 	changelog = ChangeLog
 	arch = x86_64
