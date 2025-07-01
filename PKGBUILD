@@ -3,7 +3,7 @@
 # Contributor: Kars Wang <jaklsy at gmail dot com>
 
 pkgname=jq
-pkgver=1.8.0
+pkgver=1.8.1
 pkgrel=1
 pkgdesc='Command-line JSON processor'
 arch=('x86_64')
@@ -13,7 +13,7 @@ depends=('glibc' 'oniguruma')
 makedepends=('autoconf' 'automake' 'bison' 'flex' 'python')
 source=("https://github.com/jqlang/jq/releases/download/${pkgname}-${pkgver}/${pkgname}-${pkgver}.tar.gz")
 changelog=ChangeLog
-sha512sums=('eaa991e43d3fc716dd57f6722a42d4119dcd8ba272eb2fcab882f83efb0b11c10a35c3dc8ad2067f30440dad988d34b5955601499eae1bb9e43db53db02bc4cf')
+sha512sums=('b09d48dbeaac7b552397b75692ed7833afa72186de80d977fb1b887a14ac66c02f677acdd79f9a2736db1fd738b7ce57a39725e34846bfa21ed3728cd7adc187')
 
 build() {
     cd "${pkgname}-${pkgver}"
