@@ -12,7 +12,6 @@ license=('MIT')
 depends=('glibc' 'oniguruma')
 makedepends=('autoconf' 'automake' 'bison' 'flex' 'python')
 source=("https://github.com/jqlang/jq/releases/download/${pkgname}-${pkgver}/${pkgname}-${pkgver}.tar.gz")
-changelog=ChangeLog
 sha512sums=('b09d48dbeaac7b552397b75692ed7833afa72186de80d977fb1b887a14ac66c02f677acdd79f9a2736db1fd738b7ce57a39725e34846bfa21ed3728cd7adc187')
 
 build() {
