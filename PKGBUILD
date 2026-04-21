@@ -4,7 +4,7 @@
 
 pkgname=jq
 pkgver=1.8.1
-pkgrel=2
+pkgrel=3
 pkgdesc='Command-line JSON processor'
 arch=('x86_64')
 url='https://jqlang.github.io/jq/'
