@@ -1,7 +1,7 @@
 pkgbase = jq
 	pkgdesc = Command-line JSON processor
-	pkgver = 1.8.1
-	pkgrel = 3
+	pkgver = 1.8.2
+	pkgrel = 1
 	url = https://jqlang.github.io/jq/
 	arch = x86_64
 	license = MIT
@@ -13,7 +13,7 @@ pkgbase = jq
 	makedepends = python
 	depends = glibc
 	depends = oniguruma
-	source = git+https://github.com/jqlang/jq.git#tag=jq-1.8.1
-	sha512sums = 756a136b20991bbe24ab8b1b92511b877502697146dd1c492d388ee4bf3f6c968e91e6f45078519575f57407f091e171457fd16f6794002660b493766efa3725
+	source = git+https://github.com/jqlang/jq.git#tag=jq-1.8.2
+	sha512sums = 370dfd2fffe2515f52a7c5335555a15820cf8a4906395889bf474864197705705066cc32df689272b414448b8090db3c59c3a8eb18a6bc1c7f0f036b47463d51
 
 pkgname = jq
