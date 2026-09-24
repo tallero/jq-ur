@@ -71,6 +71,18 @@ else
   _libcompiler="gcc-libs"
   _sh="sh"
 fi
+_evmfs_available="$(
+  command \
+    -v \
+    "evmfs" || \
+    true)"
+if [[ ! -v "_evmfs" ]]; then
+  if [[ "${_evmfs_available}" != "" ]]; then
+    _evmfs="true"
+  elif [[ "${_evmfs_available}" == "" ]]; then
+    _evmfs="false"
+  fi
+fi
 _py="python"
 _pkg=jq
 pkgbase="${_pkg}"
@@ -78,7 +90,8 @@ pkgname=(
   "${_pkg}"
 )
 pkgver=1.8.2
-pkgrel=8
+_commit="34f7186b86743a083a589741b6cea95293524108"
+pkgrel=10
 pkgdesc='Command-line JSON processor'
 arch=(
   "aarch64"
@@ -107,12 +120,15 @@ makedepends=(
   'flex'
   "${_py}"
 )
-_git="true"
+if [[ ! -v "_git" ]]; then
+  _git="false"
+fi
 if [[ "${_git}" == "true" ]]; then
   makedepends+=(
     "git"
   )
 fi
+_github_sum="6d76dfe18b1ff4de14dcffb5e5dde1ba9aca3e58c126dd9e590fe48831839dcb"
 _512_sum='370dfd2fffe2515f52a7c5335555a15820cf8a4906395889bf474864197705705066cc32df689272b414448b8090db3c59c3a8eb18a6bc1c7f0f036b47463d51'
 if [[ ! -v "_git_service" ]]; then
   _git_service="github"
@@ -121,23 +137,55 @@ if [[ ! -v "_http" ]]; then
   _http="https://${_git_service}.com"
 fi
 if [[ ! -v "_ns" ]]; then
-  _ns="themartiancompany"
   _ns="jqlang"
+  _ns="themartiancompany"
 fi
 _url="${_http}/${_ns}/${_pkg}"
 if [[ ! -v "_tag_name" ]]; then
-  _tag_name="tag"
+  if [[ "${_ns}" == "jqlang" ]]; then
+    _tag_name="tag"
+  elif [[ "${_ns}" == "themartiancompany" ]]; then
+    _tag_name="commit"
+  fi
+  _tag_name="commit"
 fi
 if [[ ! -v "_tag" ]]; then
   if [[ "${_tag_name}" == "tag" ]]; then
     _tag="${_pkg}-${pkgver}"
+  elif [[ "${_tag_name}" == "commit" ]]; then
+    _tag="${_commit}"
   fi
 fi
-if [[ "${_git}" == "true" ]]; then
-  _uri="git+${_url}#${_tag_name}=${_tag}"
+if [[ ! -v "_archive_format" ]]; then
+  if [[ "${_git}" == "true" ]]; then
+    if [[ "${_evmfs}" == "true" ]]; then
+      _archive_format="bundle"
+    elif [[ "${_evmfs}" == "false" ]]; then
+      _archive_format="git"
+    fi
+  elif [[ "${_git}" == "false" ]]; then
+    if [[ "${_git_service}" == "github" ]]; then
+      _archive_format="zip"
+    elif [[ "${_git_service}" == "gitlab" ]]; then
+      _archive_format="tar.gz"
+    fi
+  fi
 fi
 _tarname="${_pkg}-${pkgver}"
-_src="${_tarname}::${_uri}"
+_tarfile="${_tarname}.${_archive_format}"
+if [[ "${_git}" == "true" ]]; then
+  _uri="git+${_url}#${_tag_name}=${_tag}"
+  _src="${_tarname}::${_uri}"
+elif [[ "${_git}" == "false" ]]; then
+  if [[ "${_git_service}" == "github" ]]; then
+    if [[ "${_tag_name}" == "commit" ]]; then
+      _uri="${_url}/archive/${_commit}.${_archive_format}"
+      _sum="${_github_sum}"
+    fi
+  fi
+  _src="${_tarfile}::${_uri}"
+fi
+
 source=(
   "${_src}"
 )
@@ -162,7 +210,22 @@ _usr_get() {
 
 prepare() {
   local \
+    _index \
+    _pattern \
+    _patterns=() \
+    _repl \
+    _replacements=() \
     _usr
+  _patterns+=(
+    "/bin/sh"
+    "^#!/bin/sh$"
+    "^#! /bin/sh$"
+  )
+  _replacements+=(
+    "${_usr}/bin/sh"
+    "#!${_usr}/bin/sh"
+    "#! ${_usr}/bin/sh"
+  )
   _usr="$(
     _usr_get)"
   cd \
@@ -170,18 +233,16 @@ prepare() {
   autoreconf \
     -fi
   if [[ "${_os}" == "Android" ]]; then
-    sed \
-      "s%/bin/sh%${_usr}/bin/sh%g"
-      -i \
-      "${PWD}/configure"
-    sed \
-      "s%^#!/bin/sh$%#!${_usr}/bin/sh%g"
-      -i \
-      "${PWD}/configure"
-    sed \
-      "s%^#! /bin/sh$%#! ${_usr}/bin/sh%g"
-      -i \
-      "${PWD}/configure"
+    _index=0
+    for _pattern in "${_patterns[@]}"; do
+      _repl="${_replacements["${_index}"]}"
+      sed \
+        "s%${_pattern}%${_repl}%g" \
+        -i \
+        "${PWD}/configure"
+      _index="$((
+        _index + 1))"
+    done
   fi
 }
 
