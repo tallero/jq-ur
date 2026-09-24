@@ -97,7 +97,7 @@ pkgname=(
 )
 pkgver=1.8.2
 _commit="34f7186b86743a083a589741b6cea95293524108"
-pkgrel=22
+pkgrel=24
 pkgdesc='Command-line JSON processor'
 arch=(
   "aarch64"
@@ -165,7 +165,6 @@ if [[ ! -v "_tag_name" ]]; then
   elif [[ "${_ns}" == "themartiancompany" ]]; then
     _tag_name="commit"
   fi
-  _tag_name="commit"
 fi
 if [[ ! -v "_tag" ]]; then
   if [[ "${_tag_name}" == "tag" ]]; then
@@ -197,16 +196,8 @@ if [[ "${_git}" == "true" ]]; then
   _src="${_tarname}::${_uri}"
   if [[ "${_tag_name}" == "commit" ]]; then
     _sum="SKIP"
-  if [[ "${_tag_name}" == "tag" ]]; then
-    _msg=(
-      "You're on your own, son."
-    )
-    echo \
-      "${_msg[*]}" \
-      1>&2
-    exit \
-      1
-  fi
+  elif [[ "${_tag_name}" == "tag" ]]; then
+    _sum="SKIP"
   fi
 elif [[ "${_git}" == "false" ]]; then
   if [[ "${_git_service}" == "github" ]]; then
