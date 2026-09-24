@@ -97,7 +97,7 @@ pkgname=(
 )
 pkgver=1.8.2
 _commit="34f7186b86743a083a589741b6cea95293524108"
-pkgrel=21
+pkgrel=22
 pkgdesc='Command-line JSON processor'
 arch=(
   "aarch64"
@@ -227,9 +227,11 @@ source=(
 )
 if [[ "${_ns}" == "jqlang" ]]; then
   if [[ "${_git}" == "true" ]]; then
-    sha512sums=(
-      "${_512_sum}"
-    )
+    if [[ "${_tag_name}" == "tag" ]]; then
+      sha512sums=(
+        "${_512_sum}"
+      )
+    fi
   fi
 fi
 sha256sums=(
