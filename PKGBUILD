@@ -91,7 +91,7 @@ pkgname=(
 )
 pkgver=1.8.2
 _commit="34f7186b86743a083a589741b6cea95293524108"
-pkgrel=16
+pkgrel=17
 pkgdesc='Command-line JSON processor'
 arch=(
   "aarch64"
@@ -128,7 +128,8 @@ if [[ "${_git}" == "true" ]]; then
     "git"
   )
 fi
-_github_sum="6d76dfe18b1ff4de14dcffb5e5dde1ba9aca3e58c126dd9e590fe48831839dcb"
+_github_gz_sum="860f5609e96149f21371dd3317764a2b792dee9b6eddb0e5c8efce8fa0f9a9fd"
+_github_zip_sum="6d76dfe18b1ff4de14dcffb5e5dde1ba9aca3e58c126dd9e590fe48831839dcb"
 _512_sum='370dfd2fffe2515f52a7c5335555a15820cf8a4906395889bf474864197705705066cc32df689272b414448b8090db3c59c3a8eb18a6bc1c7f0f036b47463d51'
 if [[ ! -v "_git_service" ]]; then
   _git_service="github"
@@ -166,6 +167,7 @@ if [[ ! -v "_archive_format" ]]; then
   elif [[ "${_git}" == "false" ]]; then
     if [[ "${_git_service}" == "github" ]]; then
       _archive_format="zip"
+      _archive_format="tar.gz"
     elif [[ "${_git_service}" == "gitlab" ]]; then
       _archive_format="tar.gz"
     fi
@@ -180,7 +182,11 @@ elif [[ "${_git}" == "false" ]]; then
   if [[ "${_git_service}" == "github" ]]; then
     if [[ "${_tag_name}" == "commit" ]]; then
       _uri="${_url}/archive/${_commit}.${_archive_format}"
-      _sum="${_github_sum}"
+      if [[ "${_archive_format}" == "zip" ]]; then
+        _sum="${_github_zip_sum}"
+      elif [[ "${_archive_format}" == "tar.gz" ]]; then
+        _sum="${_github_gz_sum}"
+      fi
     fi
   fi
   _src="${_tarfile}::${_uri}"
