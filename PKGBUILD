@@ -91,7 +91,7 @@ pkgname=(
 )
 pkgver=1.8.2
 _commit="34f7186b86743a083a589741b6cea95293524108"
-pkgrel=12
+pkgrel=13
 pkgdesc='Command-line JSON processor'
 arch=(
   "aarch64"
@@ -171,7 +171,7 @@ if [[ ! -v "_archive_format" ]]; then
     fi
   fi
 fi
-_tarname="${_pkg}-${pkgver}"
+_tarname="${_pkg}-${_tag}"
 _tarfile="${_tarname}.${_archive_format}"
 if [[ "${_git}" == "true" ]]; then
   _uri="git+${_url}#${_tag_name}=${_tag}"
