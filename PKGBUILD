@@ -78,7 +78,7 @@ pkgname=(
   "${_pkg}"
 )
 pkgver=1.8.2
-pkgrel=3
+pkgrel=4
 pkgdesc='Command-line JSON processor'
 arch=(
   "aarch64"
@@ -134,7 +134,7 @@ if [[ ! -v "_tag" ]]; then
   fi
 fi
 if [[ "${_git}" == "true" ]]; then
-  _uri="git+${_url}.git#${_tag_name}=${_tag}"
+  _uri="git+${_url}#${_tag_name}=${_tag}"
 fi
 _tarname="${_pkg}-${pkgver}"
 _src="${_tarname}::${_uri}"
