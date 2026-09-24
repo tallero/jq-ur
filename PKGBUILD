@@ -78,7 +78,7 @@ pkgname=(
   "${_pkg}"
 )
 pkgver=1.8.2
-pkgrel=4
+pkgrel=5
 pkgdesc='Command-line JSON processor'
 arch=(
   "aarch64"
