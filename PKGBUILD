@@ -78,7 +78,7 @@ pkgname=(
   "${_pkg}"
 )
 pkgver=1.8.2
-pkgrel=7
+pkgrel=8
 pkgdesc='Command-line JSON processor'
 arch=(
   "aarch64"
@@ -121,8 +121,8 @@ if [[ ! -v "_http" ]]; then
   _http="https://${_git_service}.com"
 fi
 if [[ ! -v "_ns" ]]; then
-  _ns="jqlang"
   _ns="themartiancompany"
+  _ns="jqlang"
 fi
 _url="${_http}/${_ns}/${_pkg}"
 if [[ ! -v "_tag_name" ]]; then
