@@ -38,6 +38,9 @@
 #     <alex at alexchamberlain dot co dot uk>
 #   Kars Wang
 #     <jaklsy at gmail dot com>
+# Contributors:
+#   Gore Liu
+#     <goreliu@126.com>
 
 _os="$(
   uname \
@@ -97,7 +100,7 @@ pkgname=(
 )
 pkgver=1.8.2
 _commit="34f7186b86743a083a589741b6cea95293524108"
-pkgrel=25
+pkgrel=26
 pkgdesc='Command-line JSON processor'
 arch=(
   "aarch64"
@@ -113,7 +116,9 @@ arch=(
   'x86_64'
 )
 url="https://${_pkg}lang.github.io/${_pkg}"
-license=('MIT')
+license=(
+  'MIT'
+)
 depends=(
   "${_libc}"
   'oniguruma'
@@ -142,7 +147,7 @@ if [[ "${_git}" == "true" ]]; then
     "git"
   )
 fi
-_github_release_sum="SKIP"
+_github_release_sum='71b8d6e8f5fe81f6c6d0d110e3892251f6ce76ed095abd315e26e6e1193af3af'
 _github_gz_sum="860f5609e96149f21371dd3317764a2b792dee9b6eddb0e5c8efce8fa0f9a9fd"
 _github_zip_sum="6d76dfe18b1ff4de14dcffb5e5dde1ba9aca3e58c126dd9e590fe48831839dcb"
 _512_sum='370dfd2fffe2515f52a7c5335555a15820cf8a4906395889bf474864197705705066cc32df689272b414448b8090db3c59c3a8eb18a6bc1c7f0f036b47463d51'
@@ -157,6 +162,7 @@ if [[ ! -v "_ns" ]]; then
     _ns="jqlang"
   elif [[ "${_git}" == "false" ]]; then
     _ns="themartiancompany"
+    _ns="jqlang"
   fi
 fi
 _url="${_http}/${_ns}/${_pkg}"
@@ -191,6 +197,9 @@ if [[ ! -v "_archive_format" ]]; then
   fi
 fi
 _tarname="${_pkg}-${_tag}"
+if [[ "${_tag_name}" == "tag" ]]; then
+  _tarname="${_pkg}-${pkgver}"
+fi
 _tarfile="${_tarname}.${_archive_format}"
 if [[ "${_git}" == "true" ]]; then
   _uri="git+${_url}#${_tag_name}=${_tag}"
@@ -201,7 +210,7 @@ if [[ "${_git}" == "true" ]]; then
     _sum="SKIP"
   fi
 elif [[ "${_git}" == "false" ]]; then
-  if [[ "${_os}" == "Msys" ]]; then
+  if [[ "${_ns}" == "jqlang" ]]; then
     _sum="${_github_release_sum}"
     _uri="${_url}/releases/download/${_tarname}/${_tarname}.${_archive_format}"
   else
