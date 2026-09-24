@@ -59,6 +59,8 @@ elif [[ "${_os}" == "GNU/Linux" ]]; then
 elif [[ "${_os}" == "Msys" ]]; then
   _libc="msys2-w32api-runtime"
   _libc_headers="msys2-w32api-headers"
+  # Unsure if to drop the prefix
+  _pthread="${MINGW_PACKAGE_PREFIX}-libwinpthread"
   _compiler="gcc"
   _libcompiler="gcc-libs"
   _sh="sh"
@@ -100,7 +102,7 @@ pkgname=(
 )
 pkgver=1.8.2
 _commit="34f7186b86743a083a589741b6cea95293524108"
-pkgrel=26
+pkgrel=27
 pkgdesc='Command-line JSON processor'
 arch=(
   "aarch64"
@@ -123,6 +125,11 @@ depends=(
   "${_libc}"
   'oniguruma'
 )
+if [[ "${_os}" == "Msys2" ]]; then
+  depends+=(
+    "${_pthread}"
+  )
+fi
 makedepends=(
   'autoconf'
   'automake'
