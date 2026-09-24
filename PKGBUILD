@@ -78,7 +78,7 @@ pkgname=(
   "${_pkg}"
 )
 pkgver=1.8.2
-pkgrel=6
+pkgrel=7
 pkgdesc='Command-line JSON processor'
 arch=(
   "aarch64"
@@ -148,11 +148,41 @@ sha256sums=(
   "SKIP"
 )
 
+_usr_get() {
+  local \
+    _bin
+  _bin="$(
+    dirname \
+      "$(command \
+           -v \
+           "env")")"
+  dirname \
+    "${_bin}"
+}
+
 prepare() {
+  local \
+    _usr
+  _usr="$(
+    _usr_get)"
   cd \
     "${_tarname}"
   autoreconf \
     -fi
+  if [[ "${_os}" == "Android" ]]; then
+    sed \
+      "s%/bin/sh%${_usr}/bin/sh%g"
+      -i \
+      "${PWD}/configure"
+    sed \
+      "s%^#!/bin/sh$%#!${_usr}/bin/sh%g"
+      -i \
+      "${PWD}/configure"
+    sed \
+      "s%^#! /bin/sh$%#! ${_usr}/bin/sh%g"
+      -i \
+      "${PWD}/configure"
+  fi
 }
 
 build() {
