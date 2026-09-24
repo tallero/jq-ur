@@ -91,7 +91,7 @@ pkgname=(
 )
 pkgver=1.8.2
 _commit="34f7186b86743a083a589741b6cea95293524108"
-pkgrel=17
+pkgrel=18
 pkgdesc='Command-line JSON processor'
 arch=(
   "aarch64"
@@ -121,7 +121,7 @@ makedepends=(
   "${_py}"
 )
 if [[ ! -v "_git" ]]; then
-  _git="false"
+  _git="true"
 fi
 if [[ "${_git}" == "true" ]]; then
   makedepends+=(
@@ -178,6 +178,19 @@ _tarfile="${_tarname}.${_archive_format}"
 if [[ "${_git}" == "true" ]]; then
   _uri="git+${_url}#${_tag_name}=${_tag}"
   _src="${_tarname}::${_uri}"
+  if [[ "${_tag_name}" == "commit" ]]; then
+    _sum="SKIP"
+  if [[ "${_tag_name}" == "tag" ]]; then
+    _msg=(
+      "You're on your own, son."
+    )
+    echo \
+      "${_msg[*]}" \
+      1>&2
+    exit \
+      1
+  fi
+  fi
 elif [[ "${_git}" == "false" ]]; then
   if [[ "${_git_service}" == "github" ]]; then
     if [[ "${_tag_name}" == "commit" ]]; then
