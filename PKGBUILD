@@ -91,7 +91,7 @@ pkgname=(
 )
 pkgver=1.8.2
 _commit="34f7186b86743a083a589741b6cea95293524108"
-pkgrel=14
+pkgrel=16
 pkgdesc='Command-line JSON processor'
 arch=(
   "aarch64"
@@ -234,6 +234,10 @@ prepare() {
     _usr_get)"
   cd \
     "${_tarname}"
+  if [[ "${_os}" == "Android" ]]; then
+    export \
+      CONFIG_SHELL="${_usr}/bin/bash"
+  fi
   autoreconf \
     -fi
   if [[ "${_os}" == "Android" ]]; then

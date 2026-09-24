@@ -1086,6 +1086,20 @@ jobs:
                 "armv8l" \
               "dogeos-android-libassuan"*".pkg.tar."*
       - name:
+          Test '/bin/sh' link workaround.
+        run: |
+          /entrypoint.sh \
+            ln \
+              -s \
+              "/system/bin/sh" \
+              "/bin/sh" || \
+          true
+          ln \
+            -s \
+            "/system/bin/sh" \
+            "/bin/sh" || \
+          true
+      - name:
           Builds the Android package.
         run: |
           /entrypoint.sh \
