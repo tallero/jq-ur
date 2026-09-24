@@ -78,7 +78,7 @@ pkgname=(
   "${_pkg}"
 )
 pkgver=1.8.2
-pkgrel=5
+pkgrel=6
 pkgdesc='Command-line JSON processor'
 arch=(
   "aarch64"
@@ -143,6 +143,9 @@ source=(
 )
 sha512sums=(
   "${_512_sum}"
+)
+sha256sums=(
+  "SKIP"
 )
 
 prepare() {
