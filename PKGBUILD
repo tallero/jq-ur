@@ -91,7 +91,7 @@ pkgname=(
 )
 pkgver=1.8.2
 _commit="34f7186b86743a083a589741b6cea95293524108"
-pkgrel=13
+pkgrel=14
 pkgdesc='Command-line JSON processor'
 arch=(
   "aarch64"
@@ -252,10 +252,18 @@ prepare() {
 
 build() {
   local \
-    _configure_opts=()
+    _configure_opts=() \
+    _usr
+  _usr="$(
+    _usr_get)"
   _configure_opts+=(
     --prefix="/usr"
   )
+  if [[ "${_os}" == "Android" ]]; then
+    _configure_opts+=(
+      CONFIG_SHELL="${_usr}/bin/bash"
+    )
+  fi
   cd \
     "${_tarname}"
   "./configure" \
