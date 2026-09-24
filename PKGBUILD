@@ -97,7 +97,7 @@ pkgname=(
 )
 pkgver=1.8.2
 _commit="34f7186b86743a083a589741b6cea95293524108"
-pkgrel=24
+pkgrel=25
 pkgdesc='Command-line JSON processor'
 arch=(
   "aarch64"
@@ -132,16 +132,17 @@ if [[ "${_os}" == "Msys" ]]; then
   )
 fi
 if [[ ! -v "_git" ]]; then
-  _git="true"
+  _git="false"
 fi
 if [[ "${_os}" == "Msys" ]]; then
-  _git="true"
+  _git="false"
 fi
 if [[ "${_git}" == "true" ]]; then
   makedepends+=(
     "git"
   )
 fi
+_github_release_sum="SKIP"
 _github_gz_sum="860f5609e96149f21371dd3317764a2b792dee9b6eddb0e5c8efce8fa0f9a9fd"
 _github_zip_sum="6d76dfe18b1ff4de14dcffb5e5dde1ba9aca3e58c126dd9e590fe48831839dcb"
 _512_sum='370dfd2fffe2515f52a7c5335555a15820cf8a4906395889bf474864197705705066cc32df689272b414448b8090db3c59c3a8eb18a6bc1c7f0f036b47463d51'
@@ -200,13 +201,18 @@ if [[ "${_git}" == "true" ]]; then
     _sum="SKIP"
   fi
 elif [[ "${_git}" == "false" ]]; then
-  if [[ "${_git_service}" == "github" ]]; then
-    if [[ "${_tag_name}" == "commit" ]]; then
-      _uri="${_url}/archive/${_commit}.${_archive_format}"
-      if [[ "${_archive_format}" == "zip" ]]; then
-        _sum="${_github_zip_sum}"
-      elif [[ "${_archive_format}" == "tar.gz" ]]; then
-        _sum="${_github_gz_sum}"
+  if [[ "${_os}" == "Msys" ]]; then
+    _sum="${_github_release_sum}"
+    _uri="${_url}/releases/download/${_tarname}/${_tarname}.${_archive_format}"
+  else
+    if [[ "${_git_service}" == "github" ]]; then
+      if [[ "${_tag_name}" == "commit" ]]; then
+        _uri="${_url}/archive/${_commit}.${_archive_format}"
+        if [[ "${_archive_format}" == "zip" ]]; then
+          _sum="${_github_zip_sum}"
+        elif [[ "${_archive_format}" == "tar.gz" ]]; then
+          _sum="${_github_gz_sum}"
+        fi
       fi
     fi
   fi
