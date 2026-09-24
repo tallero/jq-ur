@@ -91,7 +91,7 @@ pkgname=(
 )
 pkgver=1.8.2
 _commit="34f7186b86743a083a589741b6cea95293524108"
-pkgrel=18
+pkgrel=19
 pkgdesc='Command-line JSON processor'
 arch=(
   "aarch64"
@@ -121,6 +121,9 @@ makedepends=(
   "${_py}"
 )
 if [[ ! -v "_git" ]]; then
+  _git="true"
+fi
+if [[ "${_os}" == "Msys" ]]; then
   _git="true"
 fi
 if [[ "${_git}" == "true" ]]; then
