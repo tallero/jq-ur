@@ -83,6 +83,12 @@ if [[ ! -v "_evmfs" ]]; then
     _evmfs="false"
   fi
 fi
+if [[ ! -v "_docs" ]]; then
+  _docs="true"
+  if [[ "${_os}" == "Msys" ]]; then
+    _docs="false"
+  fi
+fi
 _py="python"
 _pkg=jq
 pkgbase="${_pkg}"
@@ -91,7 +97,7 @@ pkgname=(
 )
 pkgver=1.8.2
 _commit="34f7186b86743a083a589741b6cea95293524108"
-pkgrel=19
+pkgrel=21
 pkgdesc='Command-line JSON processor'
 arch=(
   "aarch64"
@@ -120,6 +126,11 @@ makedepends=(
   'flex'
   "${_py}"
 )
+if [[ "${_os}" == "Msys" ]]; then
+  makedepends+=(
+    "libtool"
+  )
+fi
 if [[ ! -v "_git" ]]; then
   _git="true"
 fi
@@ -141,8 +152,11 @@ if [[ ! -v "_http" ]]; then
   _http="https://${_git_service}.com"
 fi
 if [[ ! -v "_ns" ]]; then
-  _ns="jqlang"
-  _ns="themartiancompany"
+  if [[ "${_git}" == "true" ]]; then
+    _ns="jqlang"
+  elif [[ "${_git}" == "false" ]]; then
+    _ns="themartiancompany"
+  fi
 fi
 _url="${_http}/${_ns}/${_pkg}"
 if [[ ! -v "_tag_name" ]]; then
@@ -260,8 +274,24 @@ prepare() {
     export \
       CONFIG_SHELL="${_usr}/bin/bash"
   fi
-  autoreconf \
-    -fi
+  if [[ "${_os}" == "Msys" ]]; then
+    echo \
+      "echo ${pkgver}" > \
+      "scripts/version"
+    autoreconf \
+      -fiv || \
+    true
+    _msg=(
+      "Running autoreconf a second time."
+    )
+    echo \
+      "${_msg[*]}"
+    autoreconf \
+      -fiv
+  else
+    autoreconf \
+      -fiv 
+  fi
   if [[ "${_os}" == "Android" ]]; then
     _index=0
     for _pattern in "${_patterns[@]}"; do
@@ -285,6 +315,21 @@ build() {
   _configure_opts+=(
     --prefix="/usr"
   )
+  if [[ "${_docs}" == "false" ]]; then
+    _configure_opts+=(
+      --disable-docs
+    )
+  fi
+  if [[ "${_os}" == "Msys" ]]; then
+    _configure_opts+=(
+      # --prefix="${MINGW_PREFIX}"
+      --build="${MINGW_CHOST}"
+      --host="${MINGW_CHOST}"
+      --target="${MINGW_CHOST}"
+      --enable-static
+      --enable-shared
+    )
+  fi
   if [[ "${_os}" == "Android" ]]; then
     _configure_opts+=(
       CONFIG_SHELL="${_usr}/bin/bash"
