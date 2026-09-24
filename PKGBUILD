@@ -91,7 +91,7 @@ pkgname=(
 )
 pkgver=1.8.2
 _commit="34f7186b86743a083a589741b6cea95293524108"
-pkgrel=10
+pkgrel=11
 pkgdesc='Command-line JSON processor'
 arch=(
   "aarch64"
@@ -189,11 +189,13 @@ fi
 source=(
   "${_src}"
 )
-sha512sums=(
-  "${_512_sum}"
-)
+if [[ "${_ns}" == "jqlang" ]]; then
+  sha512sums=(
+    "${_512_sum}"
+  )
+fi
 sha256sums=(
-  "SKIP"
+  "${_sum}"
 )
 
 _usr_get() {
